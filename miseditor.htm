@@ -1,0 +1,81 @@
+<HTML>
+<HEAD>
+    <META NAME="GENERATOR" Content="Microsoft Visual Studio">
+    <TITLE>乱藏空间 - 全平台存储文字</TITLE>
+    <style name="save">
+        .save {
+            margin: 0 auto;
+            background-color: white;
+            border-color: cornflowerblue;
+            color: #8D4BBB;
+            font-size: xx-large;
+        }
+
+        textarea {
+            border: none;
+        }
+
+        .name {
+            border: none;
+            border-bottom: groove;
+            border-color: powderblue;
+        }
+    </style>
+
+    <!--烟花-->
+    <style>
+        .save {
+            font-family: "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+            cursor: pointer;
+            animation: pulse 1s infinite alternate;
+            transition: background 0.4s, border 0.2s, margin 0.2s;
+        }
+
+            .save:hover {
+                background: hsla(220, 100%, 60%, 1);
+                margin-top: -1px;
+                animation: none;
+            }
+
+            .save:active {
+                border-bottom-width: 0;
+                margin-top: 5px;
+            }
+    </style>
+    <script>
+        $("textarea").on('keydown',function(e){
+            if(e.keyCode == 9){
+            e.preventDefault();
+            var indent = '    ';
+            var start = this.selectionStart;
+            var end = this.selectionEnd;
+            var selected = window.getSelection().toString();
+            selected = indent + selected.replace(/\n/g,'\n'+indent);
+            this.value = this.value.substring(0,start) + selected + this.value.substring(end);
+            this.setSelectionRange(start+indent.length,start+selected.length);
+            }
+        })
+    </script>
+</HEAD>
+<BODY>
+    <form action="misplace.cgi" method="get">
+        <textarea style="left:auto;width:100%;height:90%;top:auto" name="info" placeholder="请输入任意内容，再点保存按钮。下次进入时会读取"><TMPL_VAR name="info" /></textarea><br />
+
+        <input type="text" name="name" class="name" placeholder="空间名，尽量不要重复" value="<TMPL_VAR name="name" />" />
+        <input type="submit" class="name" name="sub_enter" value="刷新" />
+
+        &emsp;&emsp;
+        <input type="submit" class="save" id="botton" name="sub_keep" value="保存" />
+
+        <TMPL_VAR name="msg" />
+
+        &emsp;&emsp;
+        <input type="submit" style="border:none;border-bottom:groove;border-bottom-color:powderblue;" name="sub_share" value="分享" formtarget="_blank" />
+        &emsp;&emsp;<a style="color:grey">
+            <TMPL_VAR name="read" />
+        </a>
+        <input type="submit" style="float:right;border:none;border-bottom:groove;border-bottom-color:powderblue;" name="sub_vim" value="VIM" />
+    </form>
+    <script type="text/javascript" src="http://blogparts.giffy.me/0013/parts.js"></script>
+</BODY>
+</HTML>

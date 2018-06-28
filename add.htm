@@ -1,0 +1,47 @@
+<!doctype html>
+<head>
+    <meta charset="UTF-8">
+    <title>皇家大农林ACM协会招干</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <link type="text/css" rel="stylesheet" href="css/login.css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+</head>
+<body class="login_bj">
+
+    <div class="zhuce_body">
+        <div class="zhuce_kong">
+            <div class="zc">
+                <div class="bj_bai">
+                    <h3>欢迎参加ACM协会招干报名</h3>
+                    <form action="ACM.cgi" method="post">
+                        <input name="xm" type="text" class="kuang_txt phone" placeholder="姓名" value="<TMPL_VAR name="xm">" />
+                        <input name="xh" type="text" class="kuang_txt email" placeholder="学号" value="<TMPL_VAR name="xh">" />
+                        <input name="xy" type="text" class="kuang_txt possword" placeholder="学院" value="<TMPL_VAR name="xy">" />
+                        <input name="sj" type="text" class="kuang_txt possword" placeholder="手机号" value="<TMPL_VAR name="sj">" />
+                        <div>
+                            <input name="" type="checkbox" value="" checked="checked"><span>已阅读并同意<a href="#" target="_blank"><span class="lan">《我要成为ACM大佬协议》</span></a></span>
+                        </div>
+                        <input name="sub_bm" type="submit" class="btn_zhuce" value="确定报名">
+                        <div class="" style="color:#F00;background:#FFF"><TMPL_VAR name="errorMsg"></TMPL_VAR></div>
+                    </form>
+                </div>
+
+                <div class="bj_right">
+                    <p>ACM协会部门</p>
+                    <a href="#" class="zhuce_wb">办公室</a>
+                    <a href="#" class="zhuce_wx">组织部</a>
+                    <a href="#" class="zhuce_qq">宣传部</a>
+                    <p>点此加入<a href="http://funp.in/paper/2y58719fe63463a66f8ccf539bfb65ab76?u=1586559">ACM协会 QQ群</a></p>
+                    <div class="">
+                        <font color="#999999">
+                            面试信息<br />地点：学10-101<br />
+                            时间：已提前至 23日晚7点<br />请注意时间更改！
+                        </font>
+                    </div>
+                </div>
+            </div>
+            <div class="" style="background:#FFF"><TMPL_VAR name="all"></TMPL_VAR></div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,464 @@
+﻿<html>
+<head>
+    <title>乱藏空间+ VIM编辑器</title>
+
+    <!--
+    *这个公司没有年终奖，兄弟别指望了，也别来了，你坚持不了多久的，我准备辞职了，拜拜，祝好！
+    *上面这句话，舍不得删……就留着吧！
+    *本网页部分代码（仅VIM编辑器部分）来自网络，非原创！若有侵权请联系删除。
+    -->
+
+    <script>
+	var _hmt = _hmt || [];
+	(function() {
+		var hm = document.createElement("script");
+		hm.src = "//hm.baidu.com/hm.js?b169f904ade5ef8ef30b1f93eb03f0ef";
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(hm, s);
+	})();
+
+	function async_load(url){
+		var s = document.createElement('script');
+		s.type = 'text/javascript';
+		s.async = true;
+		s.src = url;
+		var x = document.getElementsByTagName('script')[0];
+		x.parentNode.insertBefore(s, x);
+	}
+	function aysnc_load_js(url) {
+		if (window.attachEvent)
+			window.attachEvent('onload', function() {async_load(url)});
+		else
+			window.addEventListener('load', function() {async_load(url)}, false);
+	}
+
+	function async_do_func(func) {
+		if (window.attachEvent)
+			window.attachEvent('onload', func);
+		else
+			window.addEventListener('load', func, false);
+	}
+    </script>
+    <link rel="apple-touch-icon" href="http://cdn.atool.org/res/touch-icon-iphone.png" />
+    <link rel="stylesheet" href="http://cdn.atool.org/res/bijou.min.css" />
+    <!--<link rel="stylesheet" href="http://cdn.atool.org/res/style.new.css" />-->
+    <link rel="stylesheet" href="res/ad-block/ad-block.css" />
+
+    <link rel="stylesheet" href="http://cdn.atool.org/res/lib/CodeMirror/lib/codemirror.css">
+    <link rel="stylesheet" href="http://cdn.atool.org/res/lib/CodeMirror/addon/dialog/dialog.css">
+    <link rel="stylesheet" href="http://cdn.atool.org/res/lib/CodeMirror/theme/material.css">
+    <!-- <link rel="stylesheet" href="/res/lib/CodeMirror/theme/solarized.css"> -->
+    <script src="http://cdn.atool.org/res/lib/CodeMirror/lib/codemirror.js"></script>
+    <script src="http://cdn.atool.org/res/lib/CodeMirror/addon/dialog/dialog.js"></script>
+    <script src="http://cdn.atool.org/res/lib/CodeMirror/addon/search/searchcursor.js"></script>
+    <script src="http://cdn.atool.org/res/lib/CodeMirror/mode/clike/clike.js"></script>
+    <script src="http://cdn.atool.org/res/lib/CodeMirror/addon/edit/matchbrackets.js"></script>
+    <script src="http://cdn.atool.org/res/lib/CodeMirror/keymap/vim.js"></script>
+    <style type="text/css">
+        .CodeMirror {
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+        }
+
+        .table th, .table td {
+            padding: 3px 8px;
+        }
+
+        .table td {
+            border-bottom: 2px #d1d1d1 solid;
+            padding: 8px 12px;
+            white-space: pre-wrap;
+        }
+    </style>
+
+    <style name="save">
+        .save {
+            margin: 0 auto;
+            background-color: white;
+            border-color: cornflowerblue;
+            color: powderblue;
+            font-size: xx-large;
+        }
+
+        textarea {
+            border: none;
+        }
+
+        .name {
+            border: none;
+            border-bottom: groove;
+            border-color: powderblue;
+        }
+    </style>
+
+    <!--烟花-->
+    <style>
+        .save {
+            font-family: "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+            cursor: pointer;
+            animation: pulse 1s infinite alternate;
+            transition: background 0.4s, border 0.2s, margin 0.2s;
+        }
+
+            .save:hover {
+                background: hsla(220, 100%, 60%, 1);
+                margin-top: -1px;
+                animation: none;
+            }
+
+            .save:active {
+                border-bottom-width: 0;
+                margin-top: 5px;
+            }
+    </style>
+</head>
+<body>
+
+    <style type="text/css">
+        .navbar .webmaster a {
+            color: red;
+            font-weight: bold;
+        }
+
+        .shake_logo {
+            border: none;
+        }
+
+        .full_screen_bg {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: #f1f1f1;
+            background: rgba(0,0,0,0.39);
+        }
+
+        #site_menu {
+            display: block;
+            overflow: hidden;
+        }
+
+        .sub_menus {
+            width: 510px;
+        }
+
+            .sub_menus li a {
+                color: #ddd;
+                overflow: hidden;
+            }
+        /*.sub_menus li a:hover {color: #ccc;}*/
+        .sub_menu_title {
+            background-color: rgba(248, 248, 248, 0.81) !important;
+            width: 510px;
+            height: 20px !important;
+            line-height: 20px !important;
+        }
+
+            .sub_menu_title a {
+                color: #000 !important;
+            }
+
+        #menu_list {
+            Z-INDEX: 999999;
+        }
+
+            #menu_list, #menu_list UL {
+                padding: 0px;
+                margin: 0px;
+                list-style-type: none;
+            }
+
+                #menu_list LI, #menu_list a {
+                    HEIGHT: 40px;
+                    LINE-HEIGHT: 40px;
+                    FLOAT: left;
+                }
+
+                #menu_list LI {
+                    padding: 0px;
+                    MARGIN: 0px;
+                    margin-left: -2px;
+                }
+
+                #menu_list a {
+                    DISPLAY: block;
+                    margin: 0 10px;
+                    TEXT-ALIGN: center;
+                }
+
+                    #menu_list LI:hover, #menu_list A:hover {
+                        color: #FF7B0E;
+                    }
+
+                #menu_list LI a:hover {
+                    text-decoration: none;
+                }
+
+                #menu_list LI ul li a:hover {
+                    background-image: none;
+                }
+
+                #menu_list LI UL {
+                    display: none;
+                    POSITION: absolute;
+                }
+
+                    #menu_list LI UL li, #menu_list LI UL li a {
+                        line-height: 24px;
+                        height: 24px;
+                        background-image: none;
+                    }
+
+                #menu_list LI:hover UL, #menu_list LI.sfhover UL {
+                    MARGIN-TOP: 37px;
+                    padding: 4px;
+                    Z-INDEX: 5;
+                    FILTER: alpha (opacity=80);
+                    MARGIN-LEFT: 0px;
+                    BORDER-BOTTOM: #0D1C31 1px solid;
+                    POSITION: absolute;
+                    background-color: #0D182A;
+                    opacity: 0.80;
+                    +CLEAR: both;
+                    +MARGIN-TOP: 0px;
+                    _clear: both;
+                    _margin-top: 0px;
+                    display: block;
+                }
+
+                    #menu_list LI:hover UL LI A, #menu_list LI.sfhover UL LI A {
+                        DISPLAY: block;
+                        PADDING: 0px 0px 0px 8px;
+                        FONT-WEIGHT: normal;
+                        FONT-SIZE: 13px;
+                        MARGIN: 0px;
+                        TEXT-TRANSFORM: none;
+                        WIDTH: 120px;
+                        /*color:#aCA7C7; */
+                        TEXT-ALIGN: left;
+                    }
+
+                        #menu_list LI:hover UL LI A:hover, #menu_list LI.sfhover UL LI A:hover {
+                            BACKGROUND-COLOR: #0D182A;
+                        }
+
+                #menu_list UL LI UL {
+                    DISPLAY: none;
+                }
+
+                    #menu_list UL LI UL LI A:hover {
+                        MARGIN-TOP: -2px;
+                        DISPLAY: block;
+                        FILTER: alpha (opacity=85);
+                        MARGIN-LEFT: 50px;
+                        WIDTH: 105px;
+                        POSITION: absolute;
+                        BACKGROUND-COLOR: #666;
+                    }
+
+        .sub_menus_1 {
+            margin-left: -40px !important;
+        }
+
+        .sub_menus_2 {
+            margin-left: -120px !important;
+        }
+
+        .sub_menus_3 {
+            margin-left: -200px !important;
+        }
+
+        .sub_menus_4 {
+            margin-left: -290px !important;
+        }
+
+        #menu_list .new {
+            color: #FF9292;
+        }
+    </style>
+    <script type="text/javascript">
+var sfHover = function() {
+	var sfEls = document.getElementById("site_menu").getElementsByTagName("LI");
+	for (var i=0; i<sfEls.length; i++) {
+		sfEls[i].onmouseover=function() {
+			this.className+=" sfhover";
+		}
+		sfEls[i].onmouseout=function() {
+			this.className=this.className.replace(new RegExp(" sfhover\\b"), "");
+		}
+	}
+}
+if (window.attachEvent) window.attachEvent("onload", sfHover);
+    </script>
+    <style>
+        @media only screen and (max-width: 767px) {
+            #search_tools {
+                display: none;
+            }
+        }
+
+        #search_tools {
+            align;
+        }
+    </style>
+
+    <script src='http://cdn.atool.org/res/horse/horse.min.js'></script>
+
+    <script type="text/javascript">
+	var tools = document.querySelectorAll("#menu_list a.tool");
+	var suggestions = [];
+	for (var i = 0; i< tools.length; i++) {
+		suggestions.push({ value: tools[i].href, text: tools[i].innerText });
+	}
+	horse(document.getElementById('search_tools'), {
+	  suggestions: suggestions,
+	  limit: 12,
+	  onselect: function (input, li, selection) {
+	  	window.open(selection['value'], '_blank');
+	  }
+	});
+    </script>
+    <form action="misplace.cgi" method="post">
+
+        <textarea placeholder="请输入Code" style="height:500px;" id="code" name="info"><TMPL_VAR name="info" /></textarea>
+
+        <input type="text" name="name" class="name" placeholder="空间名，尽量不要重复" value="<TMPL_VAR name="name" />" />
+        <input type="submit" class="name" name="sub_enter" value="刷新" />
+
+        &emsp;&emsp;
+        <input type="submit" class="save" id="botton" name="sub_keep" value="保存" />
+
+        <input type="hidden" name="sub_vim" />
+        <div class="alert success">
+            <span id="command-display" class="green strong"></span>
+        </div>
+    </form>
+    <script type="text/javascript">
+      		var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        		lineNumbers: true,
+        		mode: "text/x-csrc",
+        		keyMap: "vim",
+        		matchBrackets: true,
+        		showCursorWhenSelecting: true,
+        		styleActiveLine: true,
+        		theme: 'material',
+        		lineWrapping: true,
+      		});
+      		editor.setSize('100%', 600);
+      		var commandDisplay = document.getElementById('command-display');
+      		var keys = '';
+      		CodeMirror.on(editor, 'vim-keypress', function(key) {
+        		keys = keys + key;
+        		commandDisplay.innerHTML = keys;
+      		});
+      		CodeMirror.on(editor, 'vim-command-done', function(e) {
+        		keys = '';
+        		commandDisplay.innerHTML = keys;
+      		});
+    		CodeMirror.commands.save = function(){ commandDisplay.innerHTML = "VIM Saved..."; };
+    </script>
+
+    <h4 class='explainer'>VIM/VI基本命令 | VIM Learning</h4>
+    <table class="table table-bordered" style="font-size:7">
+        <thead>
+            <tr>
+                <th>分类</th>
+                <th>命令</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="green strong" rowspan="6">一、打开文件、保存、关闭文件</td>
+                <td>vim filename       //打开filename文件</td>
+            </tr>
+            <tr><td>:w       //保存文件</td></tr>
+            <tr><td>:w atool.org //保存至atool.org文件</td></tr>
+            <tr><td>:q          //退出编辑器，如果文件已修改请使用下面的命令</td></tr>
+            <tr><td>:q!        //退出编辑器，且不保存</td></tr>
+            <tr><td>:wq         //退出编辑器，且保存文件</td></tr>
+
+            <tr>
+                <td class="green strong" rowspan="8">二、插入文本或行(按ESC键可退出插入模式)</td>
+                <td>a      //在当前光标位置的右边添加文本</td>
+            </tr>
+            <tr><td>i       //在当前光标位置的左边添加文本</td></tr>
+            <tr><td>A     //在当前行的末尾位置添加文本</td></tr>
+            <tr><td>I      //在当前行的开始处添加文本(非空字符的行首)</td></tr>
+            <tr><td>O     //在当前行的上面新建一行</td></tr>
+            <tr><td>o     //在当前行的下面新建一行</td></tr>
+            <tr><td>R    //替换(覆盖)当前光标位置及后面的若干文本</td></tr>
+            <tr><td>J    //合并光标所在行及下一行为一行(依然在命令模式)</td></tr>
+
+            <tr>
+                <td class="green strong" rowspan="3">三、移动光标</td>
+                <td>使用上下左右方向键</td>
+            </tr>
+            <tr><td>命令模式下：h   向左、j   向下 、k   向上、l  向右。</td></tr>
+            <tr><td>空格键 向右、Backspace  向左、Enter  移动到下一行首、-  移动到上一行首。</td></tr>
+
+            <tr>
+                <td class="green strong" rowspan="6">四、删除、恢复字符或行</td>
+                <td>x         //删除当前字符</td>
+            </tr>
+            <tr><td>nx         //删除从光标开始的n个字符</td></tr>
+            <tr><td>dd      //删除当前行</td></tr>
+            <tr><td>ndd   //向下删除当前行在内的n行</td></tr>
+            <tr><td>u       //撤销上一步操作</td></tr>
+            <tr><td>U      //撤销对当前行的所有操作</td></tr>
+
+            <tr>
+                <td class="green strong" rowspan="4">五、搜索</td>
+                <td>/atool     //向光标下搜索atool字符串</td>
+            </tr>
+            <tr><td>?atool     //向光标上搜索atool字符串</td></tr>
+            <tr><td>n           //向下搜索前一个搜素动作</td></tr>
+            <tr><td>N         //向上搜索前一个搜索动作</td></tr>
+
+            <tr>
+                <td class="green strong" rowspan="4">六、跳至指定行</td>
+                <td>n+        //向下跳n行</td>
+            </tr>
+            <tr><td>n-         //向上跳n行</td></tr>
+            <tr><td>nG        //跳到行号为n的行</td></tr>
+            <tr><td>G           //跳至文件的底部</td></tr>
+
+            <tr>
+                <td class="green strong" rowspan="2">七、设置行号</td>
+                <td>:set  nu     //显示行号</td>
+            </tr>
+            <tr><td>:set nonu    //取消显示行号</td></tr>
+
+            <tr>
+                <td class="green strong" rowspan="8">八、复制、粘贴</td>
+                <td>yy    //将当前行复制到缓存区，也可以用 "ayy 复制，"a 为缓冲区，a也可以替换为a到z的任意字母，可以完成多个复制任务。</td>
+            </tr>
+            <tr><td>nyy   //将当前行向下n行复制到缓冲区，也可以用 "anyy 复制，"a 为缓冲区，a也可以替换为a到z的任意字母，可以完成多个复制任务。</td></tr>
+            <tr><td>yw    //复制从光标开始到词尾的字符。</td></tr>
+            <tr><td>nyw   //复制从光标开始的n个单词。</td></tr>
+            <tr><td>y^      //复制从光标到行首的内容。</td></tr>
+            <tr><td>y$      //复制从光标到行尾的内容。</td></tr>
+            <tr><td>p        //粘贴剪切板里的内容在光标后，如果使用了前面的自定义缓冲区，建议使用"ap 进行粘贴。</td></tr>
+            <tr><td>P        //粘贴剪切板里的内容在光标前，如果使用了前面的自定义缓冲区，建议使用"aP 进行粘贴。</td></tr>
+
+            <tr>
+                <td class="green strong" rowspan="4">九、替换</td>
+                <td>:s/old/new      //用new替换行中首次出现的old</td>
+            </tr>
+            <tr><td>:s/old/new/g         //用new替换行中所有的old</td></tr>
+            <tr><td>:n,m s/old/new/g     //用new替换从n到m行里所有的old</td></tr>
+            <tr><td>:%s/old/new/g      //用new替换当前文件里所有的old</td></tr>
+
+            <tr>
+                <td class="green strong" rowspan="1">十、编辑其他文件</td>
+                <td>:e otherfilename    //编辑文件名为otherfilename的文件。</td>
+            </tr>
+
+            <tr>
+                <td class="green strong" rowspan="1">十一、修改文件格式</td>
+                <td>set fileformat=unix   //将文件修改为unix格式，如win下面的文本文件在linux下会出现^M。</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
